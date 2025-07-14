@@ -124,6 +124,8 @@ def input_error(func):
             return "Contact doesn't exist."
         except IndexError:
             return "Enter the argument for the command"
+        except AttributeError:
+            return "Invalid contact."
         except Exception as e:
             return f"An unexpected error: {e}"
     return inner
@@ -145,10 +147,6 @@ def add_contact(args, book: AddressBook):
 def change_phone(args, book: AddressBook):
     name, old_phone, new_phone = args
     record = book.find(name)
-    if not record:
-        raise KeyError("Contact doesn't exist.")
-    if not record.find_phone(old_phone):
-        raise ValueError(f"Phone number {old_phone} not found.")
     record.edit_phone(old_phone, new_phone)
     return f"Phone number for {name} changed from {old_phone} to {new_phone}"
 
@@ -156,10 +154,6 @@ def change_phone(args, book: AddressBook):
 def show_phone(args, book: AddressBook):
     name = args[0]
     record = book.find(name)
-    if not record:
-        raise KeyError("Contact doesn't exist.")
-    if not record.phones:
-        return f"{name} does not have any phones listed."
     return f"{name}'s phones: {', '.join(p.value for p in record.phones)}"
 
 @input_error
@@ -181,10 +175,6 @@ def add_birthday(args, book):
 def show_birthday(args, book):
     name = args[0]
     record = book.find(name)
-    if not record:
-        return "Contact doesn't exist."
-    if not record.birthday:
-        return f"{name} does not have a birthday set."
     return f"{name}'s birthday is on {record.birthday.value}"
 
 @input_error
