@@ -82,22 +82,22 @@ class AddressBook(UserDict):
     def __str__(self):
         return "\n".join(str(record) for record in self.data.values())
     
-    def get_upcoming_birthdays(self, days=7):
-        upcoming_birthdays = []
-        today = date.today()
-
-        def adjust_for_weekend(birthday):
+    def _adjust_for_weekend(self, birthday):
             if birthday.weekday() >= 5: 
-                return self.find_next_weekday(birthday)
+                return self._find_next_weekday(birthday)
             return birthday
-
-        def find_next_weekday(start_date):
+    
+    def _find_next_weekday(self, start_date):
             days_ahead = 0
             if start_date.weekday() == 5:
                 days_ahead = 2
             elif start_date.weekday() == 6:
                 days_ahead = 1
             return start_date + timedelta(days=days_ahead)
+
+    def get_upcoming_birthdays(self, days=7):
+        upcoming_birthdays = []
+        today = date.today()
 
         for record in self.data.values():
             if record.birthday:
@@ -107,7 +107,7 @@ class AddressBook(UserDict):
                     birthday_this_year = record.birthday.value.replace(year=today.year + 1)
 
                 if 0 <= (birthday_this_year - today).days <= days:
-                    birthday_this_year = adjust_for_weekend(birthday_this_year)
+                    birthday_this_year = self._adjust_for_weekend(birthday_this_year)
                     upcoming_birthdays.append({
                         "name": record.name.value,
                         "birthday": birthday_this_year.strftime("%Y-%m-%d")
