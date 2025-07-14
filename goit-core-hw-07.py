@@ -119,13 +119,13 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            raise ValueError("Give me name and phone please.")
+            return "Give me name and phone please."
         except KeyError:
-            raise KeyError("Contact doesn't exist.")
+            return "Contact doesn't exist."
         except IndexError:
-            raise IndexError("Enter the argument for the command")
+            return "Enter the argument for the command"
         except Exception as e:
-            raise Exception(f"An unexpected error: {e}")
+            return f"An unexpected error: {e}"
     return inner
 
 @input_error
@@ -209,7 +209,7 @@ def main():
         if not user_input:
             print("Please enter the command:")
             continue
-        
+
         command, args = parse_input(user_input)
 
         if command in ["close", "exit"]:
