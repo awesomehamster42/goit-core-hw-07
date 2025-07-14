@@ -196,7 +196,7 @@ def birthdays(args, book):
     
 def parse_input(user_input):
     parts = user_input.strip().split()
-    command = parts[0]
+    command = parts[0].lower()
     return command, parts[1:]
 
 def main():
