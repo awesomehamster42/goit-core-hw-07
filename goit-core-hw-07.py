@@ -101,10 +101,11 @@ class AddressBook(UserDict):
 
         for record in self.data.values():
             if record.birthday:
-                birthday_this_year = record.birthday.value.replace(year=today.year)
+                birth_day = datetime.strptime(record.birthday.value, "%d.%m.%Y").date()
+                birthday_this_year = birth_day.replace(year=today.year)
 
                 if birthday_this_year < today:
-                    birthday_this_year = record.birthday.value.replace(year=today.year + 1)
+                    birthday_this_year = birth_day.replace(year=today.year + 1)
 
                 if 0 <= (birthday_this_year - today).days <= days:
                     birthday_this_year = self._adjust_for_weekend(birthday_this_year)
