@@ -25,10 +25,10 @@ class Phone(Field):
 class Birthday(Field):
     def __init__(self, value):
         try:
-            parsed_date = datetime.strptime(value, "%d.%m.%Y")
+            datetime.strptime(value, "%d.%m.%Y")
         except ValueError:
             raise ValueError("birthday format must be DD.MM.YYYY")
-        super().__init__(parsed_date)
+        super().__init__(value)
 
 class Record:
     def __init__(self, name, birthday=None):
